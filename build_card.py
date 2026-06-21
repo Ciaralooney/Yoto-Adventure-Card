@@ -1,0 +1,137 @@
+"""
+Run this once to create the MYO adventure card.
+This will add the streaming track URLs to the card.
+"""
+import os
+import sys
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+YOTO_ACCESS_TOKEN = os.getenv("YOTO_ACCESS_TOKEN")
+SERVER_URL        = os.getenv("SERVER_URL")
+CARD_TITLE        = "Jungle Adventure!"
+CONTENT_API       = "https://api.yotoplay.com/content"
+COVER_FILE        = "cover.png"
+UPLOAD_URL        = "https://api.yotoplay.com/media/coverImage/user/me/upload?autoconvert=true"
+
+ICON_WELCOME  = "yoto:#sa0N47sAq5txEBxBM2HrN28rVfjvnFsUKiuuN9CQiRc"
+ICON_STORY    = "yoto:#gTMbacpoeSMYqc9fNLJnxPjylraNG6jIrYEWevyzYbA"
+ICON_CHOICE1  = "yoto:#Kedwx3AqrRLdx8Nf1x9nXDwVkCHDwE4uWKz-ezhKLZc"
+ICON_CHOICE2  = "yoto:#Iy-nPpe_apDwYTUX1UzG1rTS8pM8Kgp0_tX4z7jrZM8"
+ICON_ENDING   = "yoto:#tNXOIzQIPO6OjSzmT5WFofHhK3-KRGYvnlBxE1oF0-4"
+
+
+def upload_cover():
+    if not os.path.exists(COVER_FILE):
+        print(f"Warning: {COVER_FILE} not found, skipping cover image.")
+        return None
+    print("Uploading cover image...")
+    with open(COVER_FILE, "rb") as f:
+        image_data = f.read()
+    resp = requests.post(
+        UPLOAD_URL,
+        headers={"Authorization": f"Bearer {YOTO_ACCESS_TOKEN}", "Content-Type": "image/png"},
+        data=image_data,
+    )
+    if not resp.ok:
+        print(f"Warning: cover upload failed: {resp.status_code} {resp.text}")
+        return None
+    media_url = resp.json()["coverImage"]["mediaUrl"]
+    print("Cover uploaded!")
+    return media_url
+
+
+def headers():
+    return {
+        "Authorization": f"Bearer {YOTO_ACCESS_TOKEN}",
+        "Content-Type":  "application/json",
+    }
+
+
+def stream_track(key, title, endpoint, label, icon):
+    base = SERVER_URL.rstrip("/")
+    return {
+        "key":          key,
+        "title":        title,
+        "trackUrl":     f"{base}/{endpoint}",
+        "type":         "stream",
+        "format":       "mp3",
+        "overlayLabel": label,
+        "display":      {"icon16x16": icon},
+    }
+
+
+def build_structure(cover_url=None):
+    meta = {
+        "title":       CARD_TITLE,
+        "description": "A branching jungle adventure, different story every time!",
+    }
+    if cover_url:
+        meta["cover"] = {"imageL": cover_url}
+
+    return {
+        "title": CARD_TITLE,
+        "content": {
+            "chapters": [
+                {
+                    "key":   "01",
+                    "title": "Welcome",
+                    "display": {"icon16x16": ICON_WELCOME},
+                    "tracks": [stream_track("01", "Welcome", "welcome", "W", ICON_WELCOME)],
+                },
+                {
+                    "key":   "02",
+                    "title": "Story",
+                    "display": {"icon16x16": ICON_STORY},
+                    "tracks": [
+                        stream_track("01", "Left Choice",  "left",  "1", ICON_CHOICE1),
+                        stream_track("02", "Story",         "story", "S", ICON_STORY),
+                        stream_track("03", "Right Choice", "right", "2", ICON_CHOICE2),
+                    ],
+                },
+                {
+                    "key":   "03",
+                    "title": "Ending",
+                    "display": {"icon16x16": ICON_ENDING},
+                    "tracks": [stream_track("01", "Ending", "ending", "E", ICON_ENDING)],
+                },
+            ]
+        },
+        "metadata": meta,
+    }
+
+
+def main():
+    print("Yoto Adventure - Card Builder")
+    print(f"Server: {SERVER_URL}")
+    print("=" * 40)
+
+    cover_url = upload_cover()
+    body = build_structure(cover_url)
+
+    card_id = sys.argv[1] if len(sys.argv) > 1 else None
+    if card_id:
+        body["cardId"] = card_id
+        print(f"Updating existing card: {card_id}")
+    else:
+        print("Creating new card...")
+
+    resp = requests.post(CONTENT_API, headers=headers(), json=body)
+
+    if not resp.ok:
+        print(f"Error: {resp.status_code} {resp.text}")
+        sys.exit(1)
+
+    result = resp.json()
+    card = result.get("card", {})
+    print(f"Done! Card ID: {card.get('cardId')}")
+    print("Find it in the Yoto app under Playlists.")
+    print("Link it to a blank MYO card and you're done.")
+    print("\nIMPORTANT: add this Card ID to your .env as YOTO_CARD_ID")
+    print(f"YOTO_CARD_ID={card.get('cardId')}")
+
+
+if __name__ == "__main__":
+    main()
