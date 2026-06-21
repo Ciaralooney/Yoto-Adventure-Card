@@ -67,7 +67,7 @@ YOTO_CLIENT_ID     = os.getenv("YOTO_CLIENT_ID")
 YOTO_REFRESH_TOKEN = os.getenv("YOTO_REFRESH_TOKEN")
 YOTO_DEVICE_ID     = os.getenv("YOTO_DEVICE_ID")
 YOTO_CARD_ID       = os.getenv("YOTO_CARD_ID")
-SILENCE_URL        = os.getenv("SILENCE_URL", "https://raw.githubusercontent.com/Ciaralooney/Yoto-Choose-Your-Own-Adventure-Card/main/silence.mp3")
+SILENCE_URL        = os.getenv("SILENCE_URL", "https://raw.githubusercontent.com/Ciaralooney/Yoto-Adventure-Card/main/silence.mp3")
 
 MAX_DEPTH = 5
 
