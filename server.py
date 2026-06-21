@@ -67,6 +67,7 @@ YOTO_CLIENT_ID     = os.getenv("YOTO_CLIENT_ID")
 YOTO_REFRESH_TOKEN = os.getenv("YOTO_REFRESH_TOKEN")
 YOTO_DEVICE_ID     = os.getenv("YOTO_DEVICE_ID")
 YOTO_CARD_ID       = os.getenv("YOTO_CARD_ID")
+SILENCE_URL        = os.getenv("SILENCE_URL", "https://raw.githubusercontent.com/Ciaralooney/Yoto-Choose-Your-Own-Adventure-Card/main/silence.mp3")
 
 MAX_DEPTH = 5
 
@@ -323,12 +324,16 @@ async def story(request: Request):
 
 @app.get("/left")
 async def left_placeholder(request: Request):
-    return audio(" ")
+    resp = requests.get(SILENCE_URL, stream=True, timeout=10)
+    resp.raise_for_status()
+    return StreamingResponse(resp.iter_content(chunk_size=4096), media_type="audio/mpeg")
 
 
 @app.get("/right")
 async def right_placeholder(request: Request):
-    return audio(" ")
+    resp = requests.get(SILENCE_URL, stream=True, timeout=10)
+    resp.raise_for_status()
+    return StreamingResponse(resp.iter_content(chunk_size=4096), media_type="audio/mpeg")
 
 
 @app.get("/ending")
