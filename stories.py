@@ -68,7 +68,7 @@ STORIES = [
                 "text": (
                     "You both walk inide the cave. The elephant runs ahead excitely. You stop for a moment and take in the ancient elephant carvings on the walls. You pull the baby elephant back as you see the cave gets deeper and narrower. "
                     "You stay a moment looking at the tunnel. The baby elephant tugs the player's sleeve urgently looking excited. "
-                     Press the left button to Follow the tunnel. Press the right button to Head back outside"
+                     "Press the left button to Follow the tunnel. Press the right button to Head back outside"
                 ),
                 "left": "Follow the tunnel",
                 "right": "Head back outside",
