@@ -77,9 +77,9 @@ STORIES = [
             },
             "1LLLL": {
                 "text": (
-                    "Triumph ending: You decide to follow the tunnel. You go through with the baby elephant in hand. He squirms impatiently as you navigate the dark terrain.
+                    "You decide to follow the tunnel. You go through with the baby elephant in hand. He squirms impatiently as you navigate the dark terrain."
                     "But soon the tunnel opens into a beautiful hidden valley where the whole elephant herd "
-                    "splashes in a pool. You set the baby elephant down and watch it charge towards its mother happyily. "
+                    "splashes in a pool. You set the baby elephant down and watch it charge towards its mother happily. "
                     "The mother wraps her trunk gently around you in thanks. It seems you have found the most secret place in the entire jungle."
                 ),
                 "ending": True,
@@ -87,8 +87,8 @@ STORIES = [
             },
             "1LLLR": {
                 "text": (
-                    "Triumph ending: You leave the cave and go back outside, a wise old parrot eyes you down before giving you directions."
-                    "In a squeaky voice it says Herd east of the old fig tree. You follow the directions and see an anxious herd of elephants. They seem much happier as the baby elephant charges towards them. They're very grateful to you for bringing theur baby home."
+                    "You leave the cave and go back outside. It just doesn't seem safe in there. You notice a large parrot eyeing you up. He swoops down and lands on your shoulder. In a squeaky voice he begins to give you directions."
+                    "It says the herd is east of the old fig tree. You know where the fig tree is so you follow the directions and see an anxious herd of elephants. They seem much happier as the baby elephant charges towards them. They're very grateful to you for bringing theur baby home."
                     "and the baby safely returned home."
                 ),
                 "ending": True,
@@ -96,7 +96,7 @@ STORIES = [
             },
             "1LLR": {
                 "text": (
-                    "As you site by the waterfall, a family of otters approches you"
+                    "As you sit by the waterfall, a family of otters approches you"
                     "and to your amazement "
                     "they seem to understand your problem. "
                     "They dive and resurface, they're trying to lead you along the river. But should you follow them? . "
